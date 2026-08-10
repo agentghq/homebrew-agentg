@@ -18,7 +18,10 @@
 class Agentg < Formula
   desc "Local egress firewall for AI agents: observe, gate, approve, audit"
   homepage "https://app.agentg.dev"
-  url "https://github.com/agentghq/AgentG-Dev/archive/refs/tags/v0.2.0.tar.gz"
+  # The GitHub repo is private, so source archives are served through the
+  # site's authenticated download proxy. Bytes are identical to the GitHub
+  # tarball API response; sha256 is pinned and verified by Homebrew.
+  url "https://app.agentg.dev/download/v0.2.0/source.tar.gz"
   sha256 "1cc044dd795a187f89440aef59f99042e23fccfb21d7ea1ea345dc72a14a35b7"
   license "PolyForm-Noncommercial-1.0.0"
   head "https://github.com/agentghq/AgentG-Dev.git", branch: "main"
