@@ -21,8 +21,8 @@ class Agentg < Formula
   # The GitHub repo is private, so source archives are served through the
   # site's authenticated download proxy. Bytes are identical to the GitHub
   # tarball API response; sha256 is pinned and verified by Homebrew.
-  url "https://app.agentg.dev/download/v0.3.0/source.tar.gz"
-  sha256 "bf29c3edf3bb234714d7ea0ae599360dfd77491aae2f2127295835d17806351c"
+  url "https://app.agentg.dev/download/v0.3.1/source.tar.gz"
+  sha256 "20b21f404bb1817ec30167814f9617267009738b11f6e9afdaeaf5c75a9d4ee2"
   license "PolyForm-Noncommercial-1.0.0"
   head "https://github.com/agentghq/AgentG-Dev.git", branch: "main"
 
