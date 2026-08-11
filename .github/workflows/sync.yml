@@ -1,0 +1,55 @@
+name: Sync formula to latest release
+
+# Keeps Formula/agentg.rb pointed at the newest AgentG release. The source
+# repo (agentghq/AgentG-Dev) is private, so this cannot watch it directly;
+# instead it polls the public download proxy, which serves the latest release
+# tag and its source tarball. The formula body is extracted from that tarball
+# (HomebrewFormula/agentg.rb at the tagged commit), then url+sha256 are pinned
+# to the tag — so structural formula changes ride along automatically and the
+# pinned sha is computed from the exact bytes Homebrew will fetch.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync formula
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="$(curl -fsSL https://app.agentg.dev/download/latest | jq -r .version)"
+          if ! printf '%s' "${TAG}" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "bad version from proxy: ${TAG}" >&2
+            exit 1
+          fi
+          if grep -q "download/${TAG}/source.tar.gz" Formula/agentg.rb 2>/dev/null; then
+            echo "already at ${TAG}"
+            exit 0
+          fi
+          curl -fsSL -o source.tar.gz "https://app.agentg.dev/download/${TAG}/source.tar.gz"
+          SHA="$(shasum -a 256 source.tar.gz | cut -d' ' -f1)"
+          mkdir -p Formula
+          tar -xzf source.tar.gz --wildcards --strip-components=1 -O '*/HomebrewFormula/agentg.rb' > Formula/agentg.rb
+          sed -i -E "s|url \"https://app\.agentg\.dev/download/v[0-9.]+/source\.tar\.gz\"|url \"https://app.agentg.dev/download/${TAG}/source.tar.gz\"|" Formula/agentg.rb
+          sed -i -E "s|sha256 \"[0-9a-f]{64}\"|sha256 \"${SHA}\"|" Formula/agentg.rb
+          grep -q "download/${TAG}/source.tar.gz" Formula/agentg.rb
+          grep -q "sha256 \"${SHA}\"" Formula/agentg.rb
+          git add Formula/agentg.rb
+          if git diff --cached --quiet; then
+            echo "formula unchanged"
+            exit 0
+          fi
+          git config user.name "agentg-release-bot"
+          git config user.email "noreply@agentg.dev"
+          git commit -m "agentg ${TAG}"
+          git push
