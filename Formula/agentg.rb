@@ -42,6 +42,7 @@ class Agentg < Formula
   end
 
   test do
+    ENV["AGENTG_STATE"] = (testpath/"state.db").to_s
     # Version metadata works without any state DB or privileged setup.
     assert_match version.to_s, shell_output("#{bin}/agentg version --short")
     assert_match "guard", shell_output("#{bin}/agentg help")
