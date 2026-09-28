@@ -19,8 +19,8 @@ class Agentg < Formula
   # The GitHub repo is private, so source archives are served through the
   # site's authenticated download proxy. Bytes are identical to the GitHub
   # tarball API response; sha256 is pinned and verified by Homebrew.
-  url "https://app.agentg.dev/download/v0.4.1/source.tar.gz"
-  sha256 "044639708f4b10c636e866733b4a7c04142e97a4172a275b284cf0b5d3b6e51d"
+  url "https://app.agentg.dev/download/v0.4.2/source.tar.gz"
+  sha256 "e3da5020f6256c2814a5040ec811dd78f6df545b0ff9328e3a9c07cae56da4ae"
   license "PolyForm-Noncommercial-1.0.0"
   head "https://github.com/agentghq/AgentG-Dev.git", branch: "main"
 
@@ -29,8 +29,8 @@ class Agentg < Formula
   on_macos do
     depends_on macos: :sequoia
     resource "native-capture" do
-      url "https://app.agentg.dev/download/v0.4.1/AgentGCapture.zip"
-      sha256 "f9fb24eb198ca4e0be1a03320b6ddb78329dd33f0820d2b99ee399a1098a3e4b"
+      url "https://app.agentg.dev/download/v0.4.2/AgentGCapture.zip"
+      sha256 "2af26fb18e6179ae59808100a65384c38811f3879fe45ef43671ce1f09e10ecf"
     end
   end
 
