@@ -41,7 +41,7 @@ jobs:
           mkdir -p Formula
           tar -xzf source.tar.gz --wildcards --strip-components=1 -O '*/HomebrewFormula/agentg.rb' > Formula/agentg.rb
           sed -i -E "s|url \"https://app\.agentg\.dev/download/v[0-9.]+/source\.tar\.gz\"|url \"https://app.agentg.dev/download/${TAG}/source.tar.gz\"|" Formula/agentg.rb
-          sed -i -E "s|sha256 \"[0-9a-f]{64}\"|sha256 \"${SHA}\"|" Formula/agentg.rb
+          sed -i -E "s|^  sha256 \"[0-9a-f]{64}\"|  sha256 \"${SHA}\"|" Formula/agentg.rb
           grep -q "download/${TAG}/source.tar.gz" Formula/agentg.rb
           grep -q "sha256 \"${SHA}\"" Formula/agentg.rb
           git add Formula/agentg.rb
